@@ -2,10 +2,13 @@ import React from "react"
 import Image from "next/image"
 import { BellIcon, EyeIcon, GlobeIcon, PlusIcon, SparklesIcon, SpeakerphoneIcon, VideoCameraIcon, ChatIcon } from '@heroicons/react/outline'
 import { HomeIcon, ChevronDownIcon, MenuIcon, SearchIcon } from '@heroicons/react/solid'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 
 
 function Header() {
+  const { data: session } = useSession();
+
   return (
     <div className=" sticky top-0 z-50 flex bg-white items-center px-4 shadow-sm ">
 
@@ -42,21 +45,40 @@ function Header() {
       <div className="ml-5 flex items-center lg:hidden">
         <MenuIcon className="icon" />
       </div>
-      {/* Sign in/out */}
-      <div className="hidden items-center space-x-2 border border-gray-100 p-2 lg:flex ">
+      {session ? (<div onClick={() => signOut()} className="hidden items-center space-x-2 border border-gray-100 p-2 lg:flex ">
         <div className="relative h-6 w-6 flex-shrink-0">
           <Image
-          src="https://i.ibb.co/YhMfWy0/logo-full-screen.png"
-          layout="fill"
-          objectFit="contain"
-          alt="log in"
+            src="https://i.ibb.co/YhMfWy0/logo-full-screen.png"
+            layout="fill"
+            objectFit="contain"
+            alt="log in"
           />
         </div>
-        <p className="text-gray-300">Sign In</p>
+        <div className="flex-1 text-xs">
+          <p className="truncate">{session?.user?.name}</p>
+          <p className="text-gray-300">sign Out</p>
+        </div>
       </div>
+      ) : (
+        <div onClick={() => signIn()} className="hidden items-center space-x-2 border border-gray-100 p-2 lg:flex ">
+          <div className="relative h-6 w-6 flex-shrink-0 grayscale">
+            <Image
+              src="https://i.ibb.co/YhMfWy0/logo-full-screen.png"
+              layout="fill"
+              objectFit="contain"
+              alt="log in"
+            />
+          </div>
+          <p className="text-gray-300">Sign In</p>
+        </div>
+      )}
+
+      {/* Sign in/out */}
+      {/* onClick: make an arrow function to match the signature */}
 
     </div>
   )
 }
 
 export default Header
+
