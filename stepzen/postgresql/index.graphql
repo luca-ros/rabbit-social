@@ -167,7 +167,6 @@ type Mutation {
     )
   insertPost(
     image: String!
-    created_at: DateTime!
     body: String!
     subrabbit_id: ID!
     title: String!
